@@ -1,7 +1,7 @@
 package it.polimi.bookstore.ws;
 
 
-import it.polimi.bookstore.ws.book.FastHashMap;
+import it.polimi.bookstore.ws.book.HashMapWrapper;
 
 import java.util.List;
 
@@ -24,6 +24,6 @@ public interface ServerInfo {
 	public List<String> getAllBooksTitle();
 	
 	@WebMethod
-	public FastHashMap getBooksNumberPerAuthor();
+	public HashMapWrapper getBooksNumberPerAuthor();
 	
 }

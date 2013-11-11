@@ -2,7 +2,7 @@ package it.polimi.bookstore.ws;
 
 import it.polimi.bookstore.ws.book.Book;
 import it.polimi.bookstore.ws.book.Bookstore;
-import it.polimi.bookstore.ws.book.FastHashMap;
+import it.polimi.bookstore.ws.book.HashMapWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +84,7 @@ public class ServerInfoImpl implements ServerInfo {
 
 	@Override
 	// Cannot return an HashMap (see http://stackoverflow.com/a/13787059)
-	public FastHashMap getBooksNumberPerAuthor() {
+	public HashMapWrapper getBooksNumberPerAuthor() {
 		if(books == null)
 			setup();
 		Map<String, Integer> authors = new HashMap<String, Integer>();
@@ -102,7 +102,7 @@ public class ServerInfoImpl implements ServerInfo {
 				}
 			}
 		}
-		return new FastHashMap(authors);
+		return new HashMapWrapper(authors);
 	}	
 
 

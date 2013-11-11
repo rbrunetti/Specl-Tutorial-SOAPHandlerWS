@@ -1,7 +1,7 @@
 package it.polimi.bookstore.handler;
 
 import it.polimi.wscol.WSCoLAnalyzer;
-import it.polimi.wscol.Helpers.WSCoLException;
+import it.polimi.wscol.helpers.WSCoLException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -25,21 +25,22 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 
 		System.out.println("Server : handleMessage()......");
 
-		WSCoLAnalyzer analyzer = new WSCoLAnalyzer();
-		
 		Boolean isResponse = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
 		if (!isResponse) {
 
+			WSCoLAnalyzer analyzer = new WSCoLAnalyzer();
+			
 			try {
 				SOAPMessage soapMsg = context.getMessage();
 				SOAPBody soapBody = soapMsg.getSOAPBody();
 				
+				// the analyzer parse the body of the SOAP Msg to an SDO 
 				analyzer.setXMLInput(soapBody.getOwnerDocument());
 				
 				Node requestNode = soapBody.getFirstChild();
 				String name = requestNode.getLocalName();
-//				Node evaluateNode = requestNode.getFirstChild().getNextSibling().getNextSibling().getFirstChild();
+				
 				if (name.equals("getBooksByAuthor")) {
 					String assertion = "let $author = /Envelope/Body/getBooksByAuthor/arg0; $author.cardinality() == 0;";
 					try {
@@ -68,32 +69,13 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getAllBooksTitle") || name.equals("getBooksNumberPerAuthor")){
-					
+					// nothing to do here
 				} else {
 					generateSOAPErrMessage(soapMsg, "Wrong operation.");
 				}
 				// tracking
 				soapMsg.writeTo(System.out);
 				System.out.println();
-
-			} catch (SOAPException e) {
-				System.err.println(e);
-			} catch (IOException e) {
-				System.err.println(e);
-			}
-
-		} else {
-
-			try {
-				SOAPMessage soapMsg = context.getMessage();
-				SOAPBody soapBody = soapMsg.getSOAPBody();
-				Node responseNode = soapBody.getFirstChild();
-				String name = responseNode.getLocalName();
-				if (name.equals("evaluateResponse") || name.equals("checkAssertionResponse")) {
-				
-				}
-				// tracking
-				soapMsg.writeTo(System.out);
 
 			} catch (SOAPException e) {
 				System.err.println(e);

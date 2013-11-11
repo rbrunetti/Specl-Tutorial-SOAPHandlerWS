@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlType;
 public class GetBooksNumberPerAuthorResponse {
 
     @XmlElement(name = "return", namespace = "")
-    private it.polimi.bookstore.ws.book.FastHashMap _return;
+    private it.polimi.bookstore.ws.book.HashMapWrapper _return;
 
     /**
      * 
      * @return
      *     returns FastHashMap
      */
-    public it.polimi.bookstore.ws.book.FastHashMap getReturn() {
+    public it.polimi.bookstore.ws.book.HashMapWrapper getReturn() {
         return this._return;
     }
 
@@ -29,7 +29,7 @@ public class GetBooksNumberPerAuthorResponse {
      * @param _return
      *     the value for the _return property
      */
-    public void setReturn(it.polimi.bookstore.ws.book.FastHashMap _return) {
+    public void setReturn(it.polimi.bookstore.ws.book.HashMapWrapper _return) {
         this._return = _return;
     }
 
