@@ -68,6 +68,18 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 					} catch (WSCoLException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
+				} else if(name.equals("getBooksByPublisherAndYearRange")) {
+					String assertion = "let $publisher = /Envelope/Body/getBooksByPublisherAndYearRange/arg0;"
+							+ "let $startYear = /Envelope/Body/getBooksByPublisherAndYearRange/arg1;"
+							+ "let $endYear = /Envelope/Body/getBooksByPublisherAndYearRange/arg2;"
+							+ "$publisher.cardinality() != 0 && $startYear > 1900 && $endYear <= 2013;";
+					try {
+						if(!analyzer.evaluate(assertion)){
+							generateSOAPErrMessage(soapMsg, "Passed arguments are wrong (incorrect year or empty publisher)");
+						}
+					} catch (WSCoLException e) {
+						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
+					}
 				} else if(name.equals("getAllBooksTitle") || name.equals("getBooksNumberPerAuthor")){
 					// nothing to do here
 				} else {

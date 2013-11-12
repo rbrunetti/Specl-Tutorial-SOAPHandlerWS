@@ -103,6 +103,19 @@ public class ServerInfoImpl implements ServerInfo {
 			}
 		}
 		return new HashMapWrapper(authors);
+	}
+
+	@Override
+	public List<String> getBooksByPublisherAndYearRange(String publisher, int startYear, int endYear) {
+		if(books == null)
+			setup();
+		List<String> result = new ArrayList<>();
+		for(Book b:books.getBookstore()) {
+			if(b.getPublisher().equals(publisher) && b.getYear() >= startYear && b.getYear() <= endYear){
+				result.add(b.getTitle());
+			}
+		}
+		return result;
 	}	
 
 

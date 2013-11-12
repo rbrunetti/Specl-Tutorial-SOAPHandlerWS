@@ -26,4 +26,7 @@ public interface ServerInfo {
 	@WebMethod
 	public HashMapWrapper getBooksNumberPerAuthor();
 	
+	@WebMethod
+	public List<String> getBooksByPublisherAndYearRange(String publisher, int startYear, int endYear);
+	
 }
