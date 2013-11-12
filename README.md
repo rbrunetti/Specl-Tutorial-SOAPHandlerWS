@@ -36,7 +36,7 @@ Full Zip ([download]())
 #### Installation
 Simply save libraries in a known folder inside your project and import them.<br/>
 The procedure in Eclipse IDE is<br/>
-![Import Libs](img/soap/00-ImportLibs.png)<br/>
+![Import Libs](http://rbrunetti.github.io/WSCoL-Analyser/img/soap/00-ImportLibs.png)<br/>
 _Import Libraries_
 
 <a name="example_handler_server_ws"></a>
@@ -611,4 +611,4 @@ public class ServerInfoImpl implements ServerInfo {
 ### BookstoreWS Project Organization
 Here's the directory structure of the project
 
-![Directory Structure](/img/soap/01-DirStruct.png)
+![Directory Structure](http://rbrunetti.github.io/WSCoL-Analyser/img/soap/01-DirStruct.png)
