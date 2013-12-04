@@ -1,7 +1,7 @@
 package it.polimi.bookstore.handler;
 
-import it.polimi.wscol.WSCoLAnalyzer;
-import it.polimi.wscol.helpers.WSCoLException;
+import it.polimi.specl.SpeclAnalyzer;
+import it.polimi.specl.helpers.SpeclException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 
 		if (!isResponse) {
 
-			WSCoLAnalyzer analyzer = new WSCoLAnalyzer();
+			SpeclAnalyzer analyzer = new SpeclAnalyzer();
 			
 			try {
 				SOAPMessage soapMsg = context.getMessage();
@@ -47,7 +47,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Author field could not be empty.");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBookByIsbn")) {
@@ -56,7 +56,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBooksByIsbnList")) {
@@ -65,7 +65,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBooksByPublisherAndYearRange")) {
@@ -77,7 +77,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)){
 							generateSOAPErrMessage(soapMsg, "Passed arguments are wrong (incorrect year or empty publisher)");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getAllBooksTitle") || name.equals("getBooksNumberPerAuthor")){
