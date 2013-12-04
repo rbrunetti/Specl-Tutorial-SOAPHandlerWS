@@ -1,9 +1,9 @@
-WSCoL-Tutorial-SOAPHandler-Server
+Specl-Tutorial-SOAPHandler-Server
 =================================
 
-WSCoL Analyzer Tutorial - SOAP Handler, Server Side project
+Specl Analyzer Tutorial - SOAP Handler, Server Side project
 
-The developed web service is called _BookstoreWS_, it also use an attached SOAP Handler for use WSCoL as pre-condition validator.
+The developed web service is called _BookstoreWS_, it also use an attached SOAP Handler for use Specl as pre-condition validator.
 
 ## Table of Content
 
@@ -26,9 +26,9 @@ Download the required libraries, import them in your project and start coding.<b
 <a name="example_handler_server_libs"></a>
 #### Needed Libraries
 
-* WSCoL-Analyzer.jar ([download]())
-* WSCoL.jar (required by _WSCoL-Analyzer.jar_) ([download]())
-* json-simple-1.1.1.jar (required by _WSCoL-Analyzer.jar_) ([download]())
+* Specl-Analyzer.jar ([download]())
+* Specl.jar (required by _Specl-Analyzer.jar_) ([download]())
+* json-simple-1.1.1.jar (required by _Specl-Analyzer.jar_) ([download]())
 
 Full Zip ([download]())
 
@@ -36,7 +36,7 @@ Full Zip ([download]())
 #### Installation
 Simply save libraries in a known folder inside your project and import them.<br/>
 The procedure in Eclipse IDE is<br/>
-![Import Libs](http://rbrunetti.github.io/WSCoL-Analyser/img/soap/00-ImportLibs.png)<br/>
+![Import Libs](http://rbrunetti.github.io/Specl-Analyser/img/soap/00-ImportLibs.png)<br/>
 _Import Libraries_
 
 <a name="example_handler_server_ws"></a>
@@ -355,9 +355,9 @@ This will create two files for each method of the service.
 
 <a name="example_handler_server_handler"></a>
 ### Server SOAP Handler
-The server side SOAP Handler we're going to build it's going to use WSCoL for checking constraints on the parameters passed to BookstoreService from service clients, for every incoming message.
+The server side SOAP Handler we're going to build it's going to use Specl for checking constraints on the parameters passed to BookstoreService from service clients, for every incoming message.
 
-We declare and initialize the analyzer with `WSCoLAnalyzer analyzer = new WSCoLAnalyzer();`, then we obtain the XML Document of the SOAP Message body and pass it to the analyzer that will use it as input file and parse it as an [SDO](#sdo) (`analyzer.setXMLInput(soapBody.getOwnerDocument());`).
+We declare and initialize the analyzer with `SpeclAnalyzer analyzer = new SpeclAnalyzer();`, then we obtain the XML Document of the SOAP Message body and pass it to the analyzer that will use it as input file and parse it as an [SDO](#sdo) (`analyzer.setXMLInput(soapBody.getOwnerDocument());`).
 
 ```Java
 //...
@@ -370,7 +370,7 @@ We declare and initialize the analyzer with `WSCoLAnalyzer analyzer = new WSCoLA
 
 		if (!isResponse) {
 
-			WSCoLAnalyzer analyzer = new WSCoLAnalyzer();
+			SpeclAnalyzer analyzer = new SpeclAnalyzer();
 			
 			try {
 				SOAPMessage soapMsg = context.getMessage();
@@ -385,7 +385,7 @@ We declare and initialize the analyzer with `WSCoLAnalyzer analyzer = new WSCoLA
 //...
 ```
 
-At this point we check `name` (corresponding to the called method) and we evaluate WSCoL assertions on the passed arguments (see comments), we are checking pre-conditions.
+At this point we check `name` (corresponding to the called method) and we evaluate Specl assertions on the passed arguments (see comments), we are checking pre-conditions.
 
 ```Java
 //...
@@ -397,7 +397,7 @@ if (name.equals("getBooksByAuthor")) {
     	if(analyzer.evaluate(assertion)) {
 		    generateSOAPErrMessage(soapMsg, "Author field could not be empty.");
         }
-    } catch (WSCoLException e) { // this catch errors in the assertion, but responde to client a generic message
+    } catch (SpeclException e) { // this catch errors in the assertion, but responde to client a generic message
     	generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
     }
 } else if(name.equals("getBookByIsbn")) {
@@ -407,7 +407,7 @@ if (name.equals("getBooksByAuthor")) {
     	if(!analyzer.evaluate(assertion)) {
     		generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 		}
-    } catch (WSCoLException e) {
+    } catch (SpeclException e) {
     	generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
     }
 } else if(name.equals("getBooksByIsbnList")) {
@@ -417,7 +417,7 @@ if (name.equals("getBooksByAuthor")) {
     	if(!analyzer.evaluate(assertion)) {
     		generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 		}
-	} catch (WSCoLException e) {
+	} catch (SpeclException e) {
     	generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 	}
 } else if(name.equals("getBooksByPublisherAndYearRange")) {
@@ -429,7 +429,7 @@ if (name.equals("getBooksByAuthor")) {
 		if(!analyzer.evaluate(assertion)){
 			generateSOAPErrMessage(soapMsg, "Passed arguments are wrong (incorrect year or empty publisher)");
 		}
-	} catch (WSCoLException e) {
+	} catch (SpeclException e) {
 		generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 	}
 } else if(name.equals("getAllBooksTitle") || name.equals("getBooksNumberPerAuthor")){
@@ -446,8 +446,8 @@ _File: ValidationHandler.java_
 ```Java
 package it.polimi.bookstore.handler;
 
-import it.polimi.wscol.WSCoLAnalyzer;
-import it.polimi.wscol.helpers.WSCoLException;
+import it.polimi.specl.SpeclAnalyzer;
+import it.polimi.specl.helpers.SpeclException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -475,7 +475,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 
 		if (!isResponse) {
 
-			WSCoLAnalyzer analyzer = new WSCoLAnalyzer();
+			SpeclAnalyzer analyzer = new SpeclAnalyzer();
 			
 			try {
 				SOAPMessage soapMsg = context.getMessage();
@@ -493,7 +493,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Author field could not be empty.");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBookByIsbn")) {
@@ -502,7 +502,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBooksByIsbnList")) {
@@ -511,7 +511,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)) {
 							generateSOAPErrMessage(soapMsg, "Wrong ISBN format");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getBooksByPublisherAndYearRange")) {
@@ -523,7 +523,7 @@ public class ValidationHandler implements SOAPHandler<SOAPMessageContext> {
 						if(!analyzer.evaluate(assertion)){
 							generateSOAPErrMessage(soapMsg, "Passed arguments are wrong (incorrect year or empty publisher)");
 						}
-					} catch (WSCoLException e) {
+					} catch (SpeclException e) {
 						generateSOAPErrMessage(soapMsg, "Server could not respond due to validation errors in the server side SOAPHandler.");
 					}
 				} else if(name.equals("getAllBooksTitle") || name.equals("getBooksNumberPerAuthor")){
@@ -611,4 +611,4 @@ public class ServerInfoImpl implements ServerInfo {
 ### BookstoreWS Project Organization
 Here's the directory structure of the project
 
-![Directory Structure](http://rbrunetti.github.io/WSCoL-Analyser/img/soap/01-DirStruct.png)
+![Directory Structure](http://rbrunetti.github.io/Specl-Analyser/img/soap/01-DirStruct.png)
